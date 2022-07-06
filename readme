@@ -1,2 +1,61 @@
+GENERAL README AND INSTALLED PACKAGES AND NOTES
+
+general links: https://wq2012.github.io/awesome-diarization/#Other-software
+
+
+########
+pyannote
+########
+
+need speechbrain==0.5.12 i think? (check version, one of them breaks pyannote)
+
 pip3 install https://github.com/pyannote/pyannote-audio/archive/develop.zip
 pip3 install speechbrain
+
+
+
+
+##################
+speech recognition
+##################
+
+https://realpython.com/python-speech-recognition/
+
+pip3 install SpeechRecognition
+
+
+
+
+##########
+deepspeech
+##########
+
+
+can't use python 3.10
+
+for instillation go to docs from gtihub, 
+
+https://github.com/mozilla/DeepSpeech
+https://deepspeech.readthedocs.io/en/r0.9/?badge=latest
+
+pip3 install deepspeech
+pip3 install --upgrade deepspeech
+wget https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.pbmm
+wget https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.scorer
+
+the wgets are fat, dont add to git!
+
+
+
+
+
+##################
+audio file editing
+##################
+
+
+use pydub https://www.geeksforgeeks.org/working-with-wav-files-in-python-using-pydub/
+
+pip3 install pydub
+sudo apt/yum install ffmpeg (requirement aparently! -> maybe conda install would fix it)
+

@@ -1,0 +1,139 @@
+Comparison of two differnet speech to text libraries.
+
+
+
+
+
+First, the "true" transcript i hand-write.
+
+
+
+SPEAKER_00 : yeah
+
+SPEAKER_01 : but none of it comes back out to me it's a limited company and it just says there the third one is umm there are four four of us it's a mental health trust
+
+SPEAKER_00 : yeah
+
+SPEAKER_01 : and the money just goes in to pay the employees salary I don't take anything from it
+
+SPEAKER_00 : errrr
+
+SPEAKER_01 : and nor could I
+
+SPEAKER_00 : no no sure erm ok
+
+SPEAKER_01 : it's that I don't want to take it and then gum(?) someone goes ah well that wasn't our
+
+SPEAKER_00 : no
+
+???
+
+SPEAKER_00 : no no no what I'm going to do is I'll based on what you said is i'm going to ring up april(?) UK and clarify that with them cos I think it's important to so
+
+SPEAKER_01 : yea
+
+SPEAKER_00 : first one is it's open but there's nothing going in and
+
+SPEAKER_01 : or out it's not trading
+
+SPEAKER_00 : or out not trading ok the second one is cash in but it goes automatically so that's holiday lettings and it automatically just
+
+SPEAKER_01 : well yea it sits in the business it sits in the business it's a limited company
+
+
+
+
+
+
+
+
+
+
+Now for the speech_recognition python package, these are the results using pyannote-audio to diarize
+
+
+
+
+SPEAKER_00 : ??? 
+
+SPEAKER_01 : ??? 
+
+SPEAKER_00 : none of it comes back out to me it's a limited company and it just says the third one is there a four four of us it's a mental health
+
+SPEAKER_01 : ??? 
+
+SPEAKER_00 : yeah and the manor just goes in to pay the employees salary I don't take
+
+SPEAKER_01 : ??? 
+
+SPEAKER_00 : ??? 
+
+SPEAKER_01 : no no sure
+
+SPEAKER_00 : ??? 
+
+SPEAKER_01 : ??? 
+
+SPEAKER_00 : is that I don't want to take it and then go and someone goes over
+
+SPEAKER_01 : ??? 
+
+SPEAKER_00 : no
+
+SPEAKER_01 : no no no what I'm going to do is I'll basically what you said it's going to ring up for UK and clarify that week because I think it's important to so first one is it's open but there's nothing going in
+
+SPEAKER_00 : and
+
+SPEAKER_01 : trading or not trading ok the second one is cash in but it goes automatically so that's holiday lettings and it automatically just get you
+
+SPEAKER_00 : just so you know it's it's in the business it's a limit
+
+Transcript time : 14.74632453918457s
+
+
+
+
+
+
+
+Finally, using deepspeech package and pyannote-audio to diarize
+
+
+
+
+SPEAKER_00 : yes
+
+SPEAKER_01 : 
+
+SPEAKER_00 : not if it comes back out to me as i limited company and it stays there the third one is an there are four four of us it's a mental health truth
+
+SPEAKER_01 : yes the money
+
+SPEAKER_00 : the money just goes in to pay the employee celery i don't take anything from it
+
+SPEAKER_01 : oh i can get it
+
+SPEAKER_00 : now could i
+
+SPEAKER_01 : now i show 
+
+SPEAKER_00 : as
+
+SPEAKER_01 : as
+
+SPEAKER_00 : i don't want to take it and then come on goes on that wasn't all
+
+SPEAKER_01 : now
+
+SPEAKER_00 : no woman 
+
+SPEAKER_01 : no no no wine can adorabat you said his unregenerate clarify that with them nothing is important to so persons it open but there's nothing going in and
+
+SPEAKER_00 : no it's not trading
+
+SPEAKER_01 : oh our not trading a cat the second one is cachinatory so that holiday lessingstrasse no sentence
+
+SPEAKER_00 : now sittin the business it's a limited company
+
+Transcript time : 25.836119174957275s
+
