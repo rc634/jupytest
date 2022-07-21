@@ -1,5 +1,6 @@
 GENERAL README AND INSTALLED PACKAGES AND NOTES
 
+print(float(len(wav_file))/float(info["duration_ts"]))
 general links: https://wq2012.github.io/awesome-diarization/#Other-software
 
 
@@ -58,4 +59,37 @@ use pydub https://www.geeksforgeeks.org/working-with-wav-files-in-python-using-p
 
 pip3 install pydub
 sudo apt/yum install ffmpeg (requirement aparently! -> maybe conda install would fix it)
+
+
+
+#########################
+certs on jupyter from aws
+#########################
+
+sudo openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out certificate.pem
+
+
+######################
+jupyter config for aws
+######################
+
+conf = get_config()
+
+conf.NotebookApp.ip = '0.0.0.0'
+#conf.NotebookApp.ip = '*'
+conf.NotebookApp.password = u'sha1:7bc548333a77:d8f976c2352f0787443461510535d9f8baf6b53d'
+conf.NotebookApp.port = 8888
+conf.NotebookApp.open_browser = False
+conf.NotebookApp.keyfile = u'/home/ubuntu/certs/key.pem'
+conf.NotebookApp.certfile = u'/home/ubuntu/certs/cert.pem'
+conf.NotebookApp.answer_yes = True
+
+
+
+
+
+
+
+
+
 
