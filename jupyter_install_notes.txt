@@ -1,0 +1,12 @@
+
+
+
+jupyter notebook --generate-config
+
+
+
+
+generate hash password in python
+
+from notebook.auth import passwd
+passwd()
