@@ -10,8 +10,12 @@ pyannote
 
 need speechbrain==0.5.12 i think? (check version, one of them breaks pyannote)
 
+THIS IS THE OLD WAY
 pip3 install https://github.com/pyannote/pyannote-audio/archive/develop.zip
 pip3 install speechbrain
+
+NOW WE NEED
+pip install pyannote.audio
 
 
 
