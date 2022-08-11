@@ -1,10 +1,3 @@
-
-
-# Diarisation code with pyannote-audio https://github.com/pyannote/pyannote-audio
-# Speech to text by Google https://realpython.com/python-speech-recognition/
-# backend script by Robin Croft
-
-
 # this is only needed to time parts of the code
 import time 
 
@@ -24,6 +17,9 @@ import torch
 from huggingface_hub import HfApi
 from pyannote.audio import Pipeline
 
+#for counting and collecting words spoken
+from collections import defaultdict
+import re
 
 
 # a_variable is an argument
@@ -46,6 +42,8 @@ class TranscriptGenerator:
         self.transcript = []
         self.perform_timing = a_perform_timing
         self.verbose = a_verbose 
+        self.spkr_counts = None
+        self.speaker_times = None
 
         # safety checks
         if (a_do_file_cutting): 
@@ -95,9 +93,9 @@ class TranscriptGenerator:
         time2 = time.time()
         if self.perform_timing: 
             if not a_whole_file:
-                print(f"\n>>>> Speech to text of " + a_filename + f" between {a_start_time}s and {a_end_time}s took {time2-time1} seconds.")
+                print(f"\n>>>> Speech to text of " + a_filename + f" between {round(a_start_time,1)}s and {round(a_end_time,1)}s took {round(time2-time1,1)} seconds.")
             else :
-                print(f"\n>>>> Speech to text of " + a_filename + f" took {time2-time1} seconds.")
+                print(f"\n>>>> Speech to text of " + a_filename + f" took {round(time2-time1,1)} seconds.")
 
     # diarization done on whole file, if this is too long then try cutting the file with the cut_audio_file function
     # a_perform_timing controlls wether we want to time the diarisation
@@ -161,8 +159,66 @@ class TranscriptGenerator:
         else :
             print("\nerror : must perform diarization with do_diarization() before printing it! ")
 
+    def main_word_count(self,a_num_speakers=2):
+        self.spkr_counts = [defaultdict(int) for i in range(a_num_speakers)]
+        r = sr.Recognizer()
+
+        if self.modified_filename : audio_sr = sr.AudioFile(self.modified_filename)
+        else : 
+            print("\nerror : must use merge_diarization() before word count!")
+            return
+
+        for frag in self.merged_fragments:
+            with audio_sr as source:
+                audiodata = r.record(source, offset=frag[1]-0.1, duration = frag[2]-frag[1]+0.1)
+            try:
+                words = r.recognize_google(audiodata,language="en-GB")
+                for i in range(a_num_speakers):
+                    if frag[0] == f'SPEAKER_0{i}':
+                        for word in re.findall('\w+', words.replace("'"," ")):
+                            self.spkr_counts[i][word] += 1
+            except Exception as e:
+                pass
+        for i in range(a_num_speakers):
+            print(f"\n\n##### Speaker {i} #####")
+            print(self.spkr_counts[i])
+
+    #outputs occurances of words in the list a_word_list
+    def query_occurance(self,a_word_list,a_num_speakers=2):
+        if self.modified_filename : audio_sr = sr.AudioFile(self.modified_filename)
+        else : 
+            print("\nerror : must use merge_diarization() before querying word occurance!")
+            return
+        if self.spkr_counts == None: 
+            print("\nerror : must use main_word_count() before querying word occurance!")
+            return
+        
+        for a_word in a_word_list:
+            print(f"\n\n##### Occurance of \"{a_word}\" #####")
+            for i in range(a_num_speakers):
+                print(f"\n>>>>Speaker {i} says \"{a_word}\" {self.spkr_counts[i][a_word]} times.")
+
+    # a_num_speakers should be small integer
+    def print_total_speaker_times(self,a_num_speakers=2):
+        if self.modified_filename : audio_sr = sr.AudioFile(self.modified_filename)
+        else : 
+            print("\nerror : must use merge_diarization() before printing speaker times!")
+            return
+        if self.spkr_counts == None: 
+            print("\nerror : must use main_word_count() before printing speaker times!")
+            return
+
+        self.speaker_times = [0 for i in range(a_num_speakers)]
+        for frag in self.merged_fragments:
+            for i in range(a_num_speakers):
+                if frag[0]==f"SPEAKER_0{i}":
+                    self.speaker_times[i] += frag[2]-frag[1]
+        print("\n\n##### Speaker Total Times #####")
+        for i in range(a_num_speakers):
+            print(f"\n>>>> Speaker {i} speaks for {round(self.speaker_times[i],1)} seconds.")
+
     # verbose set to True means prints things, verbose to False is a quiet run
-    def main(self):
+    def run(self):
 
         # prepare the audio file by cutting - if required
         if self.do_file_cutting:
@@ -187,17 +243,11 @@ class TranscriptGenerator:
 
         if self.verbose : self.print_transcript()
 
-        self.clean()
-
 
     # deletes the diarization object and modified wav file
+    # should only use this after run() and main_word_count()
     def clean(self):
         os.remove(self.modified_filename)
         del self.dia
 
-obj=TranscriptGenerator("../private_jupyter/audio.wav",True,False,True,8.*60.,8.5*60.)
-obj.main()
-obj.print_transcript()
-
-#TODO! try outputting plots if needed and do the mixing of diariazation adn speech to text. then make this a seperate class file and run it from a main.py or something like that
-#fix prints and verbosity
+#TODO! try outputting plots if needed. who said what or who said how much. query frequency of word for each speaker.
